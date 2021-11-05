@@ -1,1 +1,1 @@
-# stacks-java-cosmos
+# stacks-azure-cosmos
