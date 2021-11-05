@@ -1,1 +1,1 @@
-# stacks-java-core-operations
+# stacks-java-cosmos
