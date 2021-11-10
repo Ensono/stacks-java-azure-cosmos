@@ -1,0 +1,194 @@
+#############################################################################################################################
+# This is a generated file which includes some replacements.                                                                #
+# It is still very much recommended to go through this and ensure all variables are correct for your business/domain        #
+# All variables are defined in a global scope.                                                                              #
+# All Terraform produced resource names are using a labels module ensuring a predictable naming convention                  #
+# E.g.: variables for company, project, stage and domain will produce a name of `$company-$project-$stage-$domain`          #
+# NB: Some resources e.g. blob storage only allow for alpha numeric characters so the name is adjusted accordingly          #
+#  ==> `$company$project$stage$domain`                                                                                      #
+#############################################################################################################################
+name: "$(Build.SourceBranchName)-init"
+
+pr:
+  - main
+
+trigger:
+  branches:
+    include:
+      - 'main'
+  paths:
+    include:
+      - '*'
+
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: amido/stacks-pipeline-templates
+      # ref: maven-install-for-modules
+      ref: feature/yml-template
+      # EXCHANGE THIS FOR YOUR OWN ENDPOINT CONNECTION TO GITHUB
+      # REPOSITORY IS PUBLIC
+      endpoint: amidostacks
+
+  containers:
+    # Container for Java Build and Testing
+    - container: azul_java
+      image: azul/zulu-openjdk-debian:11
+    # Container for inlining Jacoco assets as Azure DevOps strips them
+    # https://github.com/microsoft/azure-pipelines-tasks/issues/3027
+    - container: node
+      image: amidostacks/node-14:0.0.1
+    # Container for Sonar Scanner
+    - container: sonar_scanner
+      image: amidostacks/ci-sonarscanner:0.0.2
+    # Container for Kubernetes Deployment
+    - container: k8s_deploy
+      image: amidostacks/ci-k8s:0.0.12
+
+variables:
+  - template: azuredevops-vars.yml
+
+stages:
+  - stage: Build
+    variables:
+      # You can find notes in the READMEs around which values to use for each ENV variable group
+      - group: stacks-credentials-nonprod-kv
+      - group: amido-stacks-java-modules
+    jobs:
+      # Compile, test and deploy to an artifact repository the Java module
+      - job: ModuleBuild
+        pool:
+          vmImage: $(pool_vm_image)
+        steps:
+          - checkout: self
+
+          - checkout: templates
+
+          # Updates the build number in Azure DevOps (requires refresh in the UI to see)
+          - bash: |
+              echo '##vso[Build.UpdateBuildNumber]${{ variables.docker_image_tag }}'
+            displayName: 'Update: Build Number'
+
+          # Validates all YAML files in the repo to check they adhere to standards
+          - template: templates/java-modules/test-validate-yaml.yml@templates
+            parameters:
+              pipeline_scripts_directory: "${{ variables.self_pipeline_scripts_dir }}"
+              container: "k8s_deploy"
+              yamllint_config_file: "${{ variables.yamllint_config_file }}"
+              yamllint_scan_directory: "${{ variables.yamllint_scan_directory }}"
+
+          # Builds the Java app, runs tests and deploy to the artifact repository
+          - template: templates/java-modules/build-java.yml@templates
+            parameters:
+              repo_root_dir: "${{ variables.self_repo_dir }}"
+              project_root_dir: "${{ variables.self_project_dir }}"
+              pipeline_scripts_directory: "${{ variables.self_pipeline_scripts_dir }}"
+              # Maven
+              maven_cache_directory: "${{ variables.maven_cache_directory }}"
+              maven_surefire_reports_dir: "${{ variables.maven_surefire_reports_dir }}"
+              maven_allowed_test_tags: "${{ variables.maven_allowed_test_tags}}"
+              maven_package_version: "${{ variables.docker_image_tag }}"
+              maven_settings_file: "${{ variables.maven_settings_file }}"
+              # Artifactory
+              artifactory_username: "$(artifactory-username)"
+              artifactory_password: "$(artifactory-password)"
+              # Docker
+              docker_build_container: "${{ variables.docker_java_image }}"
+              # Vulnerability Scanning
+              vulnerability_scan: "${{ variables.vulnerability_scan }}"
+              vulnerability_scan_fail_build_on_detection: "${{ variables.vulnerability_scan_fail_build_on_detection }}"
+              project_type: "${{ variables.java_project_type }}"
+
+          # Performs static code analysis, such as Sonar Cloud
+          - template: templates/java-modules/test-static-code-analysis.yml@templates
+            parameters:
+              project_root_dir: "${{ variables.self_project_dir }}"
+              pipeline_scripts_directory: "${{ variables.self_pipeline_scripts_dir}}"
+              # PR / Branch vars
+              source_branch_ref: "$(source_branch_ref)"
+              target_branch_ref: "$(target_branch_ref)"
+              pullrequest_number: "$(pullrequest_number)"
+              # Sonar
+              sonar_enable: ${{ variables.sonar_enable }}
+              sonar_container: "${{ variables.sonar_container }}"
+              sonar_host_url: "${{ variables.sonar_host_url }}"
+              sonar_project_name: "$(SONAR_PROJECT_NAME)"
+              sonar_project_key: "$(SONAR_PROJECT_KEY)"
+              sonar_token: "$(SONAR_TOKEN)"
+              sonar_organisation: "$(SONAR_ORGANIZATION)"
+              # Probably `GitHub` or `vsts`
+              sonar_pullrequest_provider: "GitHub"
+              sonar_remote_repo: "${{ variables.self_remote_repo }}"
+              sonar_command: "${{ variables.sonar_command }}"
+              # Docker
+              docker_image_tag: "${{ variables.docker_image_tag }}"
+
+          # Post build tasks, such as Test and Coverage upload, and publishing artefacts
+          - template: templates/java-modules/post-build-tasks.yml@templates
+            parameters:
+              project_root_dir: "${{ variables.self_project_dir }}"
+              functional_test_project_root_dir: "${{ variables.self_functional_testproject_dir }}"
+              # Build Output File
+              # files to be persisted across stages
+              build_file: false
+              build_file_path: "${{ variables.build_artifact_deploy_path }}"
+              build_file_artefact_name: "${{ variables.build_artifact_deploy_name }}"
+              # Functional tests
+              functional_test: ${{ variables.functional_test }}
+              functional_test_artefact_name: "${{ variables.functional_test_artefact_name }}"
+              functional_test_artefact_path: "${{ variables.functional_test_artefact_path }}"
+              vulnerability_scan: "${{ variables.vulnerability_scan }}"
+              vulnerability_scan_report: "${{ variables.vulnerability_scan_report }}"
+              java_project_type: "${{ variables.java_project_type }}"
+              functional_test_project_type: "${{ variables.functional_test_project_type }}"
+              # Coverage test
+              coverage_test: ${{ variables.coverage_test }}
+
+      # Build, test and deploy to an artifact repository the archetype based on the Java module
+      - job: ArchetypeBuild
+        dependsOn: ModuleBuild
+        pool:
+          vmImage: $(pool_vm_image)
+        steps:
+          - checkout: self
+
+          - checkout: templates
+
+          # Updates the build number in Azure DevOps (requires refresh in the UI to see)
+          - bash: |
+              echo '##vso[Build.UpdateBuildNumber]${{ variables.docker_image_tag }}'
+            displayName: 'Update: Build Number'
+
+          # Validates all YAML files in the repo to check they adhere to standards
+          - template: templates/java-modules/test-validate-yaml.yml@templates
+            parameters:
+              pipeline_scripts_directory: "${{ variables.self_pipeline_scripts_dir }}"
+              container: "k8s_deploy"
+              yamllint_config_file: "${{ variables.yamllint_config_file }}"
+              yamllint_scan_directory: "${{ variables.yamllint_scan_directory }}"
+
+          # Builds the Java archetype and deploy to the artifact repository
+          - template: templates/java-modules/build-java-archetype.yml@templates
+            parameters:
+              repo_root_dir: "${{ variables.self_repo_dir }}"
+              project_root_dir: "${{ variables.self_project_dir }}"
+              pipeline_scripts_directory: "${{ variables.self_pipeline_scripts_dir }}"
+              # Maven
+              maven_cache_directory: "${{ variables.maven_cache_directory }}"
+              maven_surefire_reports_dir: "${{ variables.maven_surefire_reports_dir }}"
+              maven_allowed_test_tags: "${{ variables.maven_allowed_test_tags}}"
+              maven_package_version: "${{ variables.docker_image_tag }}"
+              maven_pom_file: "${{ variables.maven_archetype_pom_file }}"
+              maven_archetype_properties_file: "${{ variables.maven_archetype_properties_file }}"
+              maven_settings_file: "${{ variables.maven_settings_file }}"
+              maven_repository_server: "${{ variables.maven_repository_server }}"
+              # Artifactory
+              artifactory_username: "$(artifactory-username)"
+              artifactory_password: "$(artifactory-password)"
+              # Docker
+              docker_build_container: "${{ variables.docker_java_image }}"
+              # Vulnerability Scanning
+              vulnerability_scan: "${{ variables.vulnerability_scan }}"
+              vulnerability_scan_fail_build_on_detection: "${{ variables.vulnerability_scan_fail_build_on_detection }}"
+              project_type: "${{ variables.java_project_type }}"
