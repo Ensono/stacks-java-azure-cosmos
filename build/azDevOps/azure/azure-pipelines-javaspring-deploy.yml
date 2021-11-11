@@ -55,6 +55,7 @@ stages:
       # You can find notes in the READMEs around which values to use for each ENV variable group
       - group: stacks-credentials-nonprod-kv
       - group: amido-stacks-java-modules
+      - group: amido-stacks-java-modules-azure-cosmos
     jobs:
       # Compile, test and deploy to an artifact repository the Java module
       - job: ModuleBuild
@@ -88,7 +89,7 @@ stages:
               maven_cache_directory: "${{ variables.maven_cache_directory }}"
               maven_surefire_reports_dir: "${{ variables.maven_surefire_reports_dir }}"
               maven_allowed_test_tags: "${{ variables.maven_allowed_test_tags}}"
-              maven_package_version: "${{ variables.docker_image_tag }}"
+              maven_package_version: "${{ variables.maven_package_version }}"
               maven_settings_file: "${{ variables.maven_settings_file }}"
               # Artifactory
               artifactory_username: "$(artifactory-username)"
@@ -178,7 +179,7 @@ stages:
               maven_cache_directory: "${{ variables.maven_cache_directory }}"
               maven_surefire_reports_dir: "${{ variables.maven_surefire_reports_dir }}"
               maven_allowed_test_tags: "${{ variables.maven_allowed_test_tags}}"
-              maven_package_version: "${{ variables.docker_image_tag }}"
+              maven_package_version: "${{ variables.maven_package_version }}"
               maven_pom_file: "${{ variables.maven_archetype_pom_file }}"
               maven_archetype_properties_file: "${{ variables.maven_archetype_properties_file }}"
               maven_settings_file: "${{ variables.maven_settings_file }}"

@@ -240,7 +240,6 @@
    |
   -->
   <activeProfiles>
-    <activeProfile>alwaysActiveProfile</activeProfile>
     <activeProfile>artifactory</activeProfile>
   </activeProfiles>
 
