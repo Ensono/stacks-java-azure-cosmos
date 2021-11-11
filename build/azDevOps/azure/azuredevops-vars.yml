@@ -131,7 +131,7 @@ variables:
 
   # Sonar
   - name: sonar_enable
-    value: false
+    value: true
   - name: sonar_container
     value: "sonar_scanner"
   - name: sonar_host_url
