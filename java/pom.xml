@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>stacks-java-module-parent</artifactId>
+        <groupId>com.amido</groupId>
+        <version>0.0.14-main</version>
+    </parent>
+
+    <artifactId>stacks-azure-cosmos</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <description>Core Azure Cosmos components for the Java Stacks solution</description>
+
+    <properties>
+        <stacks.core.commons.version>0.0.7-main</stacks.core.commons.version>
+    </properties>
+
+    <repositories>
+        <repository>
+            <snapshots/>
+            <id>snapshots</id>
+            <name>default-maven-virtual</name>
+            <url>https://amidostacks.jfrog.io/artifactory/default-maven-virtual</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.azure.spring</groupId>
+            <artifactId>azure-spring-boot-starter-cosmos</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.amido</groupId>
+            <artifactId>stacks-core-commons</artifactId>
+            <version>${stacks.core.commons.version}</version>
+        </dependency>
+
+    </dependencies>
+
+</project>
