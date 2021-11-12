@@ -25,7 +25,7 @@ resources:
     - repository: templates
       type: github
       name: amido/stacks-pipeline-templates
-      # ref: maven-install-for-modules
+      # TODO Update to the main branch, once changes are published
       ref: feature/yml-template
       # EXCHANGE THIS FOR YOUR OWN ENDPOINT CONNECTION TO GITHUB
       # REPOSITORY IS PUBLIC
