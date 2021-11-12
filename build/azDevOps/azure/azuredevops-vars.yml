@@ -1,0 +1,148 @@
+variables:
+  - name: region
+    value: westeurope
+  - name: company
+    value: amido
+  - name: project
+    value: stacks
+  - name: domain
+    value: java-azure-cosmos
+  - name: self_repo
+    value: stacks-java-azure-cosmos
+  - name: self_generic_name
+    value: $(project)-$(domain)
+
+  - name: component
+    value: azure-cosmos
+
+  - name: role
+    value: backend
+  #
+  # SelfConfig
+  # If you haven't specified source_repo at cli runtime please ensure you replace it here
+  # It is case sensitive for TFS based repos
+
+  - name: self_remote_repo
+    value: "amido/$(self_repo)"
+  - name: self_repo_src
+    value: java
+  - name: self_post_deploy_test_src
+    value: "api-tests"
+  - name: self_repo_dir
+    value: "$(Agent.BuildDirectory)/s/$(self_repo)"
+  - name: self_project_dir
+    value: "$(self_repo_dir)/$(self_repo_src)"
+  - name: self_functional_testproject_dir
+    value: "$(self_repo_dir)/$(self_post_deploy_test_src)"
+  - name: self_repo_tf_src
+    value: deploy/azure/app/kube
+  - name: self_repo_tf_dir
+    value: "$(self_repo_dir)/$(self_repo_tf_src)"
+
+  - name: self_pipeline_repo
+    value: "$(Agent.BuildDirectory)/s/stacks-pipeline-templates"
+  - name: self_pipeline_scripts_dir
+    value: "$(self_pipeline_repo)/scripts"
+  - name: self_pipeline_templates_dir
+    value: "$(self_pipeline_repo)/templates"
+
+  # Versioning
+  - name: version_major
+    value: 0
+  - name: version_minor
+    value: 0
+  - name: version_revision
+    value: "$[counter(join(variables['version_major'], join('-', variables['version_minor'])), 0)]"
+
+  # PR / Branch vars
+  - name: source_branch_ref
+    value: "$[coalesce(variables['System.PullRequest.SourceBranch'], variables['Build.SourceBranch'])]"
+  - name: target_branch_ref
+    value: "$[coalesce(variables['System.PullRequest.TargetBranch'], '')]"
+  - name: pullrequest_number
+    value: "$[coalesce(variables['System.PullRequest.PullRequestNumber'], variables['System.PullRequest.PullRequestId'], '')]"
+
+  # Docker Config
+  - name: docker_dockerfile_path
+    value: "."
+  - name: docker_image_name
+    value: "$(self_generic_name)"
+  - name: docker_image_tag
+    value: "${{ variables.version_major }}.${{ variables.version_minor }}.$(version_revision)-$(Build.SourceBranchName)"
+  - name: docker_java_image
+    value: "azul_java"
+
+  - name: resource_def_name
+    value: java-azure-cosmos
+
+  # BUILD ARTIFACTS across stages
+  - name: build_artifact_deploy_path
+    value: "${{ variables.self_repo_dir }}/deploy/k8s/app"
+  - name: build_artifact_deploy_name
+    value: "${{ variables.self_generic_name }}"
+
+  # DEFAULT IMAGE RUNNER
+  - name: pool_vm_image
+    value: ubuntu-20.04
+
+  # Maven
+  - name: maven_package_version
+    value: "${{ variables.version_major }}.${{ variables.version_minor }}.$(version_revision)-$(Build.SourceBranchName)"
+  - name: maven_cache_directory
+    value: "./.m2"
+  - name: maven_surefire_reports_dir
+    value: "target/surefire-reports"
+  - name: maven_allowed_test_tags
+    value: "Unit | Component | Integration"
+  - name: maven_archetype_pom_file
+    value: "target/generated-sources/archetype/pom.xml"
+  - name: maven_archetype_properties_file
+    value: "archetype.properties"
+  - name: maven_settings_file
+    value: "./.mvn/settings.xml"
+  - name: maven_repository_server
+    value: stacks.releases::https://amidostacks.jfrog.io/artifactory/default-maven-local
+
+  # Test
+  - name: functional_test
+    value: false
+  - name: coverage_test
+    value: false
+
+  # Vulnerability Scan
+  - name: vulnerability_scan
+    value: true
+  - name: vulnerability_scan_report
+    value: "target/dependency-check-report.html"
+  - name: vulnerability_scan_fail_build_on_detection
+    value: false
+
+  # Yamllint
+  - name: yamllint_config_file
+    value: "${{ variables.self_repo_dir }}/yamllint.conf"
+  - name: yamllint_scan_directory
+    value: "."
+
+  # Build Task Naming
+  - name: java_project_type
+    value: "Stacks Java Azure Cosmos module"
+  - name: functional_test_project_type
+    value: "Functional API Tests"
+
+  # Sonar
+  - name: sonar_enable
+    value: true
+  - name: sonar_container
+    value: "sonar_scanner"
+  - name: sonar_host_url
+    value: "https://sonarcloud.io"
+  - name: sonar_command
+    value: "sonar-scanner"
+
+  # GitHub infomration
+  - name: create_release
+    value: true
+  - name: github_release_service_connection
+    value: GitHubReleases
+  - name: github_org
+    value: $(company)
