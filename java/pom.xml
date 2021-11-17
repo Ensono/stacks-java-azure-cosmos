@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.amido.stacks.modules</groupId>
         <artifactId>stacks-modules-parent</artifactId>
-        <version>0.0.16-groupId-rename</version>
+        <version>0.0.18-main</version>
     </parent>
 
     <artifactId>stacks-azure-cosmos</artifactId>
