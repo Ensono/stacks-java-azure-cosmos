@@ -26,7 +26,7 @@ resources:
       type: github
       name: amido/stacks-pipeline-templates
       # TODO Update to the main branch, once changes are published
-      ref: feature/yml-template
+      ref: feature/java-modules-templates
       # EXCHANGE THIS FOR YOUR OWN ENDPOINT CONNECTION TO GITHUB
       # REPOSITORY IS PUBLIC
       endpoint: amidostacks
@@ -72,7 +72,7 @@ stages:
             displayName: 'Update: Build Number'
 
           # Validates all YAML files in the repo to check they adhere to standards
-          - template: templates/java-modules/test-validate-yaml.yml@templates
+          - template: azDevOps/azure/templates/steps/java/test-validate-yaml.yml@templates
             parameters:
               pipeline_scripts_directory: "${{ variables.self_pipeline_scripts_dir }}"
               container: "k8s_deploy"
@@ -80,7 +80,7 @@ stages:
               yamllint_scan_directory: "${{ variables.yamllint_scan_directory }}"
 
           # Builds the Java app, runs tests and deploy to the artifact repository
-          - template: templates/java-modules/build-java.yml@templates
+          - template: azDevOps/azure/templates/steps/java/build-java.yml@templates
             parameters:
               repo_root_dir: "${{ variables.self_repo_dir }}"
               project_root_dir: "${{ variables.self_project_dir }}"
@@ -102,7 +102,7 @@ stages:
               project_type: "${{ variables.java_project_type }}"
 
           # Performs static code analysis, such as Sonar Cloud
-          - template: templates/java-modules/test-static-code-analysis.yml@templates
+          - template: azDevOps/azure/templates/steps/java/test-static-code-analysis.yml@templates
             parameters:
               project_root_dir: "${{ variables.self_project_dir }}"
               pipeline_scripts_directory: "${{ variables.self_pipeline_scripts_dir}}"
@@ -126,7 +126,7 @@ stages:
               docker_image_tag: "${{ variables.docker_image_tag }}"
 
           # Post build tasks, such as Test and Coverage upload, and publishing artefacts
-          - template: templates/java-modules/post-build-tasks.yml@templates
+          - template: azDevOps/azure/templates/steps/java/post-build-tasks.yml@templates
             parameters:
               project_root_dir: "${{ variables.self_project_dir }}"
               functional_test_project_root_dir: "${{ variables.self_functional_testproject_dir }}"
@@ -162,7 +162,7 @@ stages:
             displayName: 'Update: Build Number'
 
           # Validates all YAML files in the repo to check they adhere to standards
-          - template: templates/java-modules/test-validate-yaml.yml@templates
+          - template: azDevOps/azure/templates/steps/java/test-validate-yaml.yml@templates
             parameters:
               pipeline_scripts_directory: "${{ variables.self_pipeline_scripts_dir }}"
               container: "k8s_deploy"
@@ -170,7 +170,7 @@ stages:
               yamllint_scan_directory: "${{ variables.yamllint_scan_directory }}"
 
           # Builds the Java archetype and deploy to the artifact repository
-          - template: templates/java-modules/build-java-archetype.yml@templates
+          - template: azDevOps/azure/templates/steps/java/build-java-archetype.yml@templates
             parameters:
               repo_root_dir: "${{ variables.self_repo_dir }}"
               project_root_dir: "${{ variables.self_project_dir }}"
