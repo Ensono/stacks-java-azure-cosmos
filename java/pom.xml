@@ -15,7 +15,7 @@
     <description>Core Azure Cosmos components for the Java Stacks solution</description>
 
     <properties>
-        <stacks.core.commons.version>0.0.10-groupId-rename</stacks.core.commons.version>
+        <stacks.core.commons.version>0.0.13-main</stacks.core.commons.version>
     </properties>
 
     <repositories>
