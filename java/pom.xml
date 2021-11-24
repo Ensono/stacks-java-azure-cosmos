@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.amido.stacks.modules</groupId>
         <artifactId>stacks-modules-parent</artifactId>
-        <version>0.0.21-main</version>
+        <version>0.1.5-SNAPSHOT</version>
     </parent>
 
     <artifactId>stacks-azure-cosmos</artifactId>
@@ -17,15 +17,6 @@
     <properties>
         <stacks.core.commons.version>0.0.24-main</stacks.core.commons.version>
     </properties>
-
-    <repositories>
-        <repository>
-            <snapshots/>
-            <id>snapshots</id>
-            <name>default-maven-virtual</name>
-            <url>https://amidostacks.jfrog.io/artifactory/default-maven-virtual</url>
-        </repository>
-    </repositories>
 
     <dependencies>
 
