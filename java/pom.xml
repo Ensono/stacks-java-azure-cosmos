@@ -18,6 +18,13 @@
         <stacks.core.commons.version>0.0.24-main</stacks.core.commons.version>
     </properties>
 
+    <repositories>
+        <repository>
+        <id>stacks.snapshots</id>
+        <url>https://amidostacks.jfrog.io/artifactory/stacks-maven-snapshots-local</url>
+        </repository>
+    </repositories>
+
     <dependencies>
 
         <dependency>
