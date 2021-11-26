@@ -7,7 +7,7 @@
 # NB: Some resources e.g. blob storage only allow for alpha numeric characters so the name is adjusted accordingly          #
 #  ==> `$company$project$stage$domain`                                                                                      #
 #############################################################################################################################
-name: "$(Build.SourceBranchName)-init"
+name: $(version_major).$(version_minor).$(version_patch).$(Rev:r)-$(build_type)
 
 pr:
   - main

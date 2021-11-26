@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.amido.stacks.modules</groupId>
         <artifactId>stacks-modules-parent</artifactId>
-        <version>0.1.5-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
     <artifactId>stacks-azure-cosmos</artifactId>
@@ -15,7 +15,7 @@
     <description>Core Azure Cosmos components for the Java Stacks solution</description>
 
     <properties>
-        <stacks.core.commons.version>0.0.26-SNAPSHOT</stacks.core.commons.version>
+        <stacks.core.commons.version>1.0.0</stacks.core.commons.version>
     </properties>
 
     <repositories>
