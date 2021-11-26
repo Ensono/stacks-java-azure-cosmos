@@ -48,11 +48,16 @@ variables:
 
   # Versioning
   - name: version_major
-    value: 0
+    value: 1
   - name: version_minor
     value: 0
-  - name: version_revision
-    value: "$[counter(join(variables['version_major'], join('-', variables['version_minor'])), 0)]"
+  - name: version_patch
+    value: 0
+  - name: build_type
+    ${{ if eq( variables['Build.SourceBranchName'], 'main' ) }}:
+      value: "RELEASE"
+    ${{ if ne( variables['Build.SourceBranchName'], 'main' ) }}:
+      value: "SNAPSHOT"
 
   # PR / Branch vars
   - name: source_branch_ref
@@ -68,7 +73,7 @@ variables:
   - name: docker_image_name
     value: "$(self_generic_name)"
   - name: docker_image_tag
-    value: "${{ variables.version_major }}.${{ variables.version_minor }}.$(version_revision)-$(Build.SourceBranchName)"
+    value: "${{ variables.version_major }}.${{ variables.version_minor }}.$(Build.BuildNumber)-$(Build.SourceBranchName)"
   - name: docker_java_image
     value: "azul_java"
 
@@ -87,7 +92,10 @@ variables:
 
   # Maven
   - name: maven_package_version
-    value: "${{ variables.version_major }}.${{ variables.version_minor }}.$(version_revision)-$(Build.SourceBranchName)"
+    ${{ if eq( variables['Build.SourceBranchName'], 'main' ) }}:
+      value: "${{ variables.version_major }}.${{ variables.version_minor }}.$(variables.version_patch)"
+    ${{ if ne( variables['Build.SourceBranchName'], 'main' ) }}:
+      value: "$(Build.BuildNumber)"
   - name: maven_cache_directory
     value: "./.m2"
   - name: maven_surefire_reports_dir
@@ -101,7 +109,10 @@ variables:
   - name: maven_settings_file
     value: "./.mvn/settings.xml"
   - name: maven_repository_server
-    value: stacks.releases::https://amidostacks.jfrog.io/artifactory/default-maven-local
+    ${{ if eq( variables['Build.SourceBranchName'], 'main' ) }}:
+      value: stacks.releases::https://amidostacks.jfrog.io/artifactory/stacks-maven-releases-local
+    ${{ if ne( variables['Build.SourceBranchName'], 'main' ) }}:
+      value: stacks.releases::https://amidostacks.jfrog.io/artifactory/stacks-maven-snapshots-local
 
   # Test
   - name: functional_test
