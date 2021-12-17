@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>com.amido.stacks.modules</groupId>
         <artifactId>stacks-modules-parent</artifactId>
-        <version>1.0.0-RC3</version>
+        <version>1.0.0-RC4</version>
     </parent>
 
     <artifactId>stacks-azure-cosmos</artifactId>
@@ -38,6 +37,20 @@
             <groupId>com.amido.stacks.modules</groupId>
             <artifactId>stacks-core-commons</artifactId>
             <version>${stacks.core.commons.version}</version>
+        </dependency>
+
+        <!-- https://snyk.io/vuln/SNYK-JAVA-IONETTY-1584064 -->
+        <!-- https://snyk.io/vuln/SNYK-JAVA-IONETTY-1584063 -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-codec-http</artifactId>
+            <version>${io.netty.netty-codec-http.version}</version>
+        </dependency>
+
+        <!-- https://security.snyk.io/vuln/SNYK-JAVA-COMGOOGLECODEGSON-1730327 -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
         </dependency>
 
     </dependencies>
