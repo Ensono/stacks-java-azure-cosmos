@@ -194,4 +194,3 @@ stages:
               # private  key id  to sign doc
               gpg_key_signing_id: "$(gpg-key-signing-id)"
               gpg_private_key: "$(gpg-private-key)"
-              vulnerability_scan_report: "${{ variables.vulnerability_scan_report }}"
