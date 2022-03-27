@@ -33,7 +33,7 @@ resources:
   containers:
     # Container for Java Build and Testing
     - container: azul_java
-      image: azul/zulu-openjdk-debian:11
+      image: amidostacks/runner-pwsh-java:0.3.94-main
     # Container for inlining Jacoco assets as Azure DevOps strips them
     # https://github.com/microsoft/azure-pipelines-tasks/issues/3027
     - container: node
@@ -85,15 +85,20 @@ stages:
               maven_allowed_test_tags: "${{ variables.maven_allowed_test_tags}}"
               maven_package_version: "${{ variables.maven_package_version }}"
               maven_settings_file: "${{ variables.maven_settings_file }}"
-              # Artifactory
-              artifactory_username: "$(artifactory-username)"
-              artifactory_password: "$(artifactory-password)"
+              # OSSRH
+              ossrh_jira_id: "$(ossrh-jira-id)"
+              ossrh_jira_password: "$(ossrh-jira-password)"
               # Docker
               docker_build_container: "${{ variables.docker_java_image }}"
               # Vulnerability Scanning
               vulnerability_scan: "${{ variables.vulnerability_scan }}"
               vulnerability_scan_fail_build_on_detection: "${{ variables.vulnerability_scan_fail_build_on_detection }}"
               project_type: "${{ variables.java_project_type }}"
+              build_type: "${{ variables.build_type }}"
+              # private  key id  to sign doc
+              gpg_key_signing_id: "$(gpg-key-signing-id)"
+              gpg_private_key: "$(gpg-private-key)"
+              vulnerability_scan_report: "${{ variables.vulnerability_scan_report }}"
 
           # Performs static code analysis, such as Sonar Cloud
           - template: azDevOps/azure/templates/steps/java/test-static-code-analysis.yml@templates
@@ -139,6 +144,9 @@ stages:
               functional_test_project_type: "${{ variables.functional_test_project_type }}"
               # Coverage test
               coverage_test: ${{ variables.coverage_test }}
+              # Docker
+              docker_build_container: "${{ variables.docker_java_image }}"
+
 
       # Build, test and deploy to an artifact repository the archetype based on the Java module
       - job: ArchetypeBuild
@@ -173,12 +181,17 @@ stages:
               maven_archetype_properties_file: "${{ variables.maven_archetype_properties_file }}"
               maven_settings_file: "${{ variables.maven_settings_file }}"
               maven_repository_server: "${{ variables.maven_repository_server }}"
-              # Artifactory
-              artifactory_username: "$(artifactory-username)"
-              artifactory_password: "$(artifactory-password)"
+              # OSSRH
+              ossrh_jira_id: "$(ossrh-jira-id)"
+              ossrh_jira_password: "$(ossrh-jira-password)"
               # Docker
               docker_build_container: "${{ variables.docker_java_image }}"
               # Vulnerability Scanning
               vulnerability_scan: "${{ variables.vulnerability_scan }}"
               vulnerability_scan_fail_build_on_detection: "${{ variables.vulnerability_scan_fail_build_on_detection }}"
               project_type: "${{ variables.java_project_type }}"
+              build_type: "${{ variables.build_type }}"
+              # private  key id  to sign doc
+              gpg_key_signing_id: "$(gpg-key-signing-id)"
+              gpg_private_key: "$(gpg-private-key)"
+              vulnerability_scan_report: "${{ variables.vulnerability_scan_report }}"
