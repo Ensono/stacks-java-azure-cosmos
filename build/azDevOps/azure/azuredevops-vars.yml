@@ -110,9 +110,8 @@ variables:
     value: "./.mvn/settings.xml"
   - name: maven_repository_server
     ${{ if eq( variables['Build.SourceBranchName'], 'main' ) }}:
-    ${{ if eq( variables['Build.SourceBranchName'], 'dev-test-RC4' ) }}:
       value: ossrh::https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/
-    ${{ if ne( variables['Build.SourceBranchName'], 'dev-test-RC4' ) }}:
+    ${{ if ne( variables['Build.SourceBranchName'], 'main' ) }}:
       value: ossrh::https://s01.oss.sonatype.org/content/repositories/snapshots
 
   # Test
