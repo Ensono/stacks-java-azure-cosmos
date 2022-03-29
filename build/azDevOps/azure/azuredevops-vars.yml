@@ -110,9 +110,9 @@ variables:
     value: "./.mvn/settings.xml"
   - name: maven_repository_server
     ${{ if eq( variables['Build.SourceBranchName'], 'main' ) }}:
-      value: stacks.releases::https://amidostacks.jfrog.io/artifactory/stacks-maven-releases-local
+      value: ossrh::https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/
     ${{ if ne( variables['Build.SourceBranchName'], 'main' ) }}:
-      value: stacks.releases::https://amidostacks.jfrog.io/artifactory/stacks-maven-snapshots-local
+      value: ossrh::https://s01.oss.sonatype.org/content/repositories/snapshots
 
   # Test
   - name: functional_test
