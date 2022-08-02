@@ -15,7 +15,7 @@
   <description>Core Azure Cosmos components for the Java Stacks solution</description>
 
   <properties>
-    <stacks.core.commons.version>1.0.0</stacks.core.commons.version>
+    <stacks.core.commons.version>1.0.3</stacks.core.commons.version>
   </properties>
 
   <repositories>
