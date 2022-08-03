@@ -74,7 +74,8 @@ stages:
               yamllint_scan_directory: "${{ variables.yamllint_scan_directory }}"
 
           # Builds the Java app, runs tests and deploy to the artifact repository
-          - template: azDevOps/azure/templates/steps/java/build-java.yml@templates
+          # SJD - template: azDevOps/azure/templates/steps/java/build-java.yml@templates
+          - template: templates/steps/build/build-java.yml
             parameters:
               repo_root_dir: "${{ variables.self_repo_dir }}"
               project_root_dir: "${{ variables.self_project_dir }}"
