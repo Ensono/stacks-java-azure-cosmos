@@ -126,7 +126,8 @@ stages:
               docker_image_tag: "${{ variables.docker_image_tag }}"
 
           # Post build tasks, such as Test and Coverage upload, and publishing artefacts
-          - template: azDevOps/azure/templates/steps/java/post-build-tasks.yml@templates
+          # SJD - template: azDevOps/azure/templates/steps/java/post-build-tasks.yml@templates
+          - template: templates/steps/build/post-build-tasks.yml
             parameters:
               project_root_dir: "${{ variables.self_project_dir }}"
               functional_test_project_root_dir: "${{ variables.self_functional_testproject_dir }}"
