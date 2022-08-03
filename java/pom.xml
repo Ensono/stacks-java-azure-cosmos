@@ -1,58 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.amido.stacks.modules</groupId>
-        <artifactId>stacks-modules-parent</artifactId>
-        <version>1.0.0-RC5</version>
-    </parent>
+  <parent>
+    <groupId>com.amido.stacks.modules</groupId>
+    <artifactId>stacks-modules-parent</artifactId>
+    <version>2.0.1-RELEASE</version>
+  </parent>
 
-    <artifactId>stacks-azure-cosmos</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <description>Core Azure Cosmos components for the Java Stacks solution</description>
+  <artifactId>stacks-azure-cosmos</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <description>Core Azure Cosmos components for the Java Stacks solution</description>
 
-    <properties>
-        <stacks.core.commons.version>1.0.0</stacks.core.commons.version>
-    </properties>
+  <properties>
+    <stacks.core.commons.version>1.0.3</stacks.core.commons.version>
+  </properties>
 
-    <repositories>
-        <repository>
-            <snapshots/>
-            <id>snapshots</id>
-            <name>default-maven-virtual</name>
-            <url>https://amidostacks.jfrog.io/artifactory/default-maven-virtual</url>
-        </repository>
-    </repositories>
+  <dependencies>
 
-    <dependencies>
+    <dependency>
+      <groupId>com.azure.spring</groupId>
+      <artifactId>azure-spring-boot-starter-cosmos</artifactId>
+      <version>${cosmosdb.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>net.minidev</groupId>
+          <artifactId>json-smart</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-codec-http</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
 
-        <dependency>
-            <groupId>com.azure.spring</groupId>
-            <artifactId>azure-spring-boot-starter-cosmos</artifactId>
-        </dependency>
 
-        <dependency>
-            <groupId>com.amido.stacks.modules</groupId>
-            <artifactId>stacks-core-commons</artifactId>
-            <version>${stacks.core.commons.version}</version>
-        </dependency>
+    <dependency>
+      <groupId>com.amido.stacks.modules</groupId>
+      <artifactId>stacks-core-commons</artifactId>
+      <version>${stacks.core.commons.version}</version>
+    </dependency>
 
-        <!-- https://snyk.io/vuln/SNYK-JAVA-IONETTY-1584064 -->
-        <!-- https://snyk.io/vuln/SNYK-JAVA-IONETTY-1584063 -->
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-codec-http</artifactId>
-            <version>${io.netty.netty-codec-http.version}</version>
-        </dependency>
+    <!-- https://snyk.io/vuln/SNYK-JAVA-IONETTY-1584064 -->
+    <!-- https://snyk.io/vuln/SNYK-JAVA-IONETTY-1584063 -->
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-codec-http</artifactId>
+      <version>${io.netty.netty-codec-http.version}</version>
+    </dependency>
 
-        <!-- https://security.snyk.io/vuln/SNYK-JAVA-COMGOOGLECODEGSON-1730327 -->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-        </dependency>
+    <!-- https://security.snyk.io/vuln/SNYK-JAVA-COMGOOGLECODEGSON-1730327 -->
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+    </dependency>
 
-    </dependencies>
+  </dependencies>
 
 </project>
