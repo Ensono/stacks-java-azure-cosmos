@@ -12,7 +12,7 @@ import static org.mockito.Mockito.when;
 
 import com.amido.stacks.workloads.menu.domain.Menu;
 import com.amido.stacks.workloads.menu.domain.utility.MenuHelper;
-import com.amido.stacks.workloads.menu.repository.MenuRepository;
+import com.amido.stacks.workloads.menu.repository.CosmosMenuRepository;
 import com.amido.stacks.workloads.menu.service.MenuQueryService;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +28,7 @@ class CosmosMenuQueryServiceTest {
   @Test
   void findById() {
 
-    MenuRepository repository = mock(MenuRepository.class);
+    CosmosMenuRepository repository = mock(CosmosMenuRepository.class);
     MenuQueryService menuQueryServiceImpl = new CosmosMenuQueryService(repository);
 
     Menu menu = MenuHelper.createMenu(1);
@@ -46,7 +46,7 @@ class CosmosMenuQueryServiceTest {
   @Test
   void findAll() {
 
-    MenuRepository repository = mock(MenuRepository.class);
+    CosmosMenuRepository repository = mock(CosmosMenuRepository.class);
     MenuQueryService menuQueryServiceImpl = new CosmosMenuQueryService(repository);
 
     Pageable pageable = mock(Pageable.class);
@@ -69,7 +69,7 @@ class CosmosMenuQueryServiceTest {
   @Test
   void findAllByRestaurantId() {
 
-    MenuRepository repository = mock(MenuRepository.class);
+    CosmosMenuRepository repository = mock(CosmosMenuRepository.class);
     MenuQueryService menuQueryServiceImpl = new CosmosMenuQueryService(repository);
 
     Pageable pageable = mock(Pageable.class);
@@ -88,7 +88,7 @@ class CosmosMenuQueryServiceTest {
   @Test
   void findAllByNameContaining() {
 
-    MenuRepository repository = mock(MenuRepository.class);
+    CosmosMenuRepository repository = mock(CosmosMenuRepository.class);
     MenuQueryService menuQueryServiceImpl = new CosmosMenuQueryService(repository);
 
     Pageable pageable = mock(Pageable.class);
@@ -107,7 +107,7 @@ class CosmosMenuQueryServiceTest {
   @Test
   void findAllByRestaurantIdAndNameContaining() {
 
-    MenuRepository repository = mock(MenuRepository.class);
+    CosmosMenuRepository repository = mock(CosmosMenuRepository.class);
     MenuQueryService menuQueryServiceImpl = new CosmosMenuQueryService(repository);
 
     Pageable pageable = mock(Pageable.class);
