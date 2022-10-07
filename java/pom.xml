@@ -53,8 +53,7 @@
       <artifactId>stacks-azure</artifactId>
       <version>${stacks.azure.version}</version>
     </dependency>
-
-
+    
   </dependencies>
 
 </project>
