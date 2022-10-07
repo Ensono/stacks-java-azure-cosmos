@@ -25,8 +25,8 @@ resources:
     - repository: templates
       type: github
       name: amido/stacks-pipeline-templates
-      ref: feature/cycle9-fix-funct-test
-      # EXCHANGE THIS FOR YOUR OWN ENDPOINT CONNECTION TO GITHUB
+      ref: feature/cycle9
+      # EXCHANGE THIS FOR YOUR OWN ENDPOINT CONNECTION   TO GITHUB
       # REPOSITORY IS PUBLIC
       endpoint: amidostacks
 
