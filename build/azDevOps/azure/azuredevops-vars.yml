@@ -52,7 +52,7 @@ variables:
   - name: version_minor
     value: 0
   - name: version_patch
-    value: 1
+    value: 2
   - name: build_type
     ${{ if eq( variables['Build.SourceBranchName'], 'main' ) }}:
       value: "RELEASE"
