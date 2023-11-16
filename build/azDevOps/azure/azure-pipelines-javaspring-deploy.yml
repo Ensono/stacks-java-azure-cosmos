@@ -25,7 +25,7 @@ resources:
     - repository: templates
       type: github
       name: Ensono/stacks-pipeline-templates
-      ref: feature/cycle9
+      ref: feature/cycle4
       # EXCHANGE THIS FOR YOUR OWN ENDPOINT CONNECTION   TO GITHUB
       # REPOSITORY IS PUBLIC
       endpoint: amidostacks
