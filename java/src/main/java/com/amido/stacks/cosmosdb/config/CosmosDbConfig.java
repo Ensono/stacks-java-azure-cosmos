@@ -36,9 +36,7 @@ public class CosmosDbConfig extends AbstractCosmosConfiguration {
 
   @Override
   public CosmosConfig cosmosConfig() {
-    return CosmosConfig.builder()
-        .enableQueryMetrics(false)
-        .build();
+    return CosmosConfig.builder().enableQueryMetrics(false).build();
   }
 
   @Override
