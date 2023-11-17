@@ -52,7 +52,7 @@ variables:
   - name: version_minor
     value: 0
   - name: version_patch
-    value: 1
+    value: 2
   - name: build_type
     ${{ if eq( variables['Build.SourceBranchName'], 'main' ) }}:
       value: "RELEASE"
@@ -101,7 +101,7 @@ variables:
   - name: maven_surefire_reports_dir
     value: "target/surefire-reports"
   - name: maven_allowed_test_tags
-    value: "Unit | Component | Integration"
+    value: "Unit | Component | Integration | Functional | Performance | Smoke"
   - name: maven_archetype_pom_file
     value: "target/generated-sources/archetype/pom.xml"
   - name: maven_archetype_properties_file
@@ -118,7 +118,7 @@ variables:
   - name: functional_test
     value: false
   - name: coverage_test
-    value: false
+    value: true
 
   # Vulnerability Scan
   - name: vulnerability_scan
