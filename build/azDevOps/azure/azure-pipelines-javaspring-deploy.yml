@@ -74,7 +74,8 @@ stages:
               yamllint_scan_directory: "${{ variables.yamllint_scan_directory }}"
 
           # Builds the Java app, runs tests and deploy to the artifact repository
-          - template: azDevOps/azure/templates/steps/java/build-java.yml@templates
+          # SJD - template: azDevOps/azure/templates/steps/java/build-java.yml@templates
+          - template: templates/steps/build/build-java.yml
             parameters:
               repo_root_dir: "${{ variables.self_repo_dir }}"
               project_root_dir: "${{ variables.self_project_dir }}"
@@ -125,7 +126,8 @@ stages:
               docker_image_tag: "${{ variables.docker_image_tag }}"
 
           # Post build tasks, such as Test and Coverage upload, and publishing artefacts
-          - template: azDevOps/azure/templates/steps/java/post-build-tasks.yml@templates
+          # SJD - template: azDevOps/azure/templates/steps/java/post-build-tasks.yml@templates
+          - template: templates/steps/build/post-build-tasks.yml
             parameters:
               project_root_dir: "${{ variables.self_project_dir }}"
               functional_test_project_root_dir: "${{ variables.self_functional_testproject_dir }}"
