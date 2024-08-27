@@ -88,7 +88,7 @@ variables:
 
   # DEFAULT IMAGE RUNNER
   - name: pool_vm_image
-    value: ubuntu-20.04
+    value: ubuntu-24.04
 
   # Maven
   - name: maven_package_version
@@ -127,6 +127,10 @@ variables:
     value: "target/dependency-check-report.html"
   - name: vulnerability_scan_fail_build_on_detection
     value: false
+  - name: vulnerability_scan_api_key
+    value: "$(VULNERABILITY_SCAN_API_KEY)"
+  - name: vulnerability_scan_database_directory
+    value: ${{ variables.self_repo_dir }}/.vulnerability-database
 
   # Yamllint
   - name: yamllint_config_file
@@ -144,7 +148,7 @@ variables:
   - name: sonar_enable
     value: true
   - name: sonar_container
-    value: "sonar_scanner"
+    value: "azul_java"
   - name: sonar_host_url
     value: "https://sonarcloud.io"
   - name: sonar_command
