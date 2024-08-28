@@ -30,18 +30,20 @@ resources:
       # REPOSITORY IS PUBLIC
       endpoint: ensonostacks
 
+  # NOTE: To use the branch release containers, prefix with ensonostackseuweirdfmu.azurecr.io/
+  # i.e. ensonostackseuweirdfmu.azurecr.io/ensono/eir-java:1.1.222
   containers:
     # Container for Java Build and Testing
     # Container for Sonar Scanner
     - container: azul_java
-      image: ensonostackseuweirdfmu.azurecr.io/ensono/eir-java:1.1.216
+      image: ensono/eir-java:1.1.222
     # Container for inlining Jacoco assets as Azure DevOps strips them
     # https://github.com/microsoft/azure-pipelines-tasks/issues/3027
     - container: node
-      image: ensonostackseuweirdfmu.azurecr.io/ensono/eir-nodejs:1.1.216
+      image: ensono/eir-nodjs:1.1.222
     # Container for Kubernetes Deployment
     - container: k8s_deploy
-      image: ensonostackseuweirdfmu.azurecr.io/ensono/eir-infrastructure:1.1.216
+      image: ensono/eir-infrastructure:1.1.222
 
 variables:
   - template: azuredevops-vars.yml
@@ -188,6 +190,6 @@ stages:
               docker_build_container: "${{ variables.docker_java_image }}"
               project_type: "${{ variables.java_project_type }}"
               build_type: "${{ variables.build_type }}"
-              # private  key id  to sign doc
+              # private key id  to sign doc
               gpg_key_signing_id: "$(gpg-key-signing-id)"
               gpg_private_key: "$(gpg-private-key)"
