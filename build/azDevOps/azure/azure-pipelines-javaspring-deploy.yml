@@ -7,7 +7,7 @@
 # NB: Some resources e.g. blob storage only allow for alpha numeric characters so the name is adjusted accordingly          #
 #  ==> `$company$project$stage$domain`                                                                                      #
 #############################################################################################################################
-name: $(version_major).$(version_minor).$(version_patch).$(Rev:r)-$(build_type)
+name: $(version_major).$(version_minor).$(Rev:r)-$(build_type)
 
 pr:
   - main
@@ -36,14 +36,14 @@ resources:
     # Container for Java Build and Testing
     # Container for Sonar Scanner
     - container: azul_java
-      image: ensono/eir-java:1.1.222
+      image: ensono/eir-java:1.1.251
     # Container for inlining Jacoco assets as Azure DevOps strips them
     # https://github.com/microsoft/azure-pipelines-tasks/issues/3027
     - container: node
-      image: ensono/eir-nodjs:1.1.222
+      image: ensono/eir-nodjs:1.1.251
     # Container for Kubernetes Deployment
     - container: k8s_deploy
-      image: ensono/eir-infrastructure:1.1.222
+      image: ensono/eir-infrastructure:1.1.251
 
 variables:
   - template: azuredevops-vars.yml
@@ -149,12 +149,13 @@ stages:
               # Docker
               docker_build_container: "${{ variables.docker_java_image }}"
 
-
       # Build, test and deploy to an artifact repository the archetype based on the Java module
       - job: ArchetypeBuild
         dependsOn: ModuleBuild
         pool:
           vmImage: $(pool_vm_image)
+        variables:
+          - release-github-credentials
         steps:
           - checkout: self
 
@@ -193,3 +194,17 @@ stages:
               # private key id  to sign doc
               gpg_key_signing_id: "$(gpg-key-signing-id)"
               gpg_private_key: "$(gpg-private-key)"
+
+          - task: PowerShell@2
+            condition: eq(variables['build_type'], 'RELEASE')
+            inputs:
+              targetType: inline
+              script: |
+                Import-Module /modules/EnsonoBuild
+                Publish-GitHubRelease -GenerateReleaseNotes $true -UploadArtifacts $false
+            env:
+              STAGE: "release"
+              PUBLISH_RELEASE: "true"
+            target:
+              container: k8s_deploy
+            displayName: Publish GitHub Release

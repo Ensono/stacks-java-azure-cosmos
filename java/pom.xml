@@ -6,8 +6,7 @@
 
   <!-- Uncomment the below to reference a com.amido package that's still in SNAPSHOT -->
   <!-- NOTE: That should be for development only, and should be commented out before merging a PR -->
-  <!-- TODO: Comement this out before merging..! -->
-  <repositories>
+  <!-- <repositories>
     <repository>
         <id>oss.sonatype.org-snapshot</id>
         <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
@@ -18,13 +17,12 @@
           <enabled>true</enabled>
         </snapshots>
     </repository>
-  </repositories>
+  </repositories> -->
 
   <parent>
     <groupId>com.amido.stacks.modules</groupId>
     <artifactId>stacks-modules-parent</artifactId>
-    <!-- TODO: Set this to the parent release version before merging this..! -->
-    <version>2.0.7.27-SNAPSHOT</version>
+    <version>3.0.26-RELEASE</version>
   </parent>
 
   <artifactId>stacks-azure-cosmos</artifactId>
