@@ -155,7 +155,7 @@ stages:
         pool:
           vmImage: $(pool_vm_image)
         variables:
-          - release-github-credentials
+          - group: release-github-credentials
         steps:
           - checkout: self
 
